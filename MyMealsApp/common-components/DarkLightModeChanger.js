@@ -25,8 +25,8 @@ const DarkLightModeChanger = (props) => {
   };
   const styles = StyleSheet.create({
     screen: {
-      padding: 30,
-      paddingHorizontal: screenData.isLandscape ? 60 : 30,
+      padding: 20,
+      paddingHorizontal: screenData.isLandscape ? 60 : 20,
       paddingBottom: 0,
       alignItems: "center",
       backgroundColor: mode

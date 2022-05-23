@@ -8,7 +8,7 @@ import { showMessage } from "react-native-flash-message";
 import { Provider } from "react-redux";
 import Store from "./store/Main";
 import DarkLightModeChanger from "./common-components/DarkLightModeChanger";
-import PaddingView from "./common-components/PaddingView";
+import MyMealsNavigations from "./navigation/MyMealsNavigations";
 const fetchFonts = () => {
   return Font.loadAsync({
     "poppins-bold": require("./assets/fonts/Poppins-Bold.otf"),
@@ -19,6 +19,7 @@ const fetchFonts = () => {
     "poppins-regular": require("./assets/fonts/Poppins-Regular.otf"),
   });
 };
+
 export default function App() {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   if (!isDataLoaded) {
@@ -39,8 +40,9 @@ export default function App() {
   return (
     <Provider store={Store}>
       <View style={styles.screen}>
-        <Header title={"MyMeals App"} />
-        <DarkLightModeChanger />
+        {/* <Header title={"MyMeals App"} />
+        <DarkLightModeChanger /> */}
+        <MyMealsNavigations/>
         <FlashMessage
           position="bottom"
           statusBarHeight={0}

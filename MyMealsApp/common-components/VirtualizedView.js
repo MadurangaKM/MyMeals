@@ -4,7 +4,7 @@ import { FlatList } from "react-native";
 export default function VirtualizedView(props) {
   return (
     <FlatList
-      style={{...props.style}}
+      style={{ ...props.style }}
       data={[]}
       ListEmptyComponent={null}
       keyExtractor={() => "dummy"}
