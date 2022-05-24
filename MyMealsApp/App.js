@@ -9,6 +9,7 @@ import { Provider } from "react-redux";
 import Store from "./store/Main";
 import DarkLightModeChanger from "./common-components/DarkLightModeChanger";
 import MyMealsNavigations from "./navigation/MyMealsNavigations";
+import TabNavigation from "./navigation/MyMealsNavigations";
 const fetchFonts = () => {
   return Font.loadAsync({
     "poppins-bold": require("./assets/fonts/Poppins-Bold.otf"),
@@ -42,7 +43,7 @@ export default function App() {
       <View style={styles.screen}>
         {/* <Header title={"MyMeals App"} />
         <DarkLightModeChanger /> */}
-        <MyMealsNavigations/>
+        <TabNavigation />
         <FlashMessage
           position="bottom"
           statusBarHeight={0}

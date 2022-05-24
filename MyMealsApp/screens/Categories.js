@@ -1,12 +1,12 @@
-import { View, StyleSheet, FlatList } from "react-native";
+import { View, StyleSheet, FlatList, TouchableOpacity } from "react-native";
 import DrakLightModeChanger from "../common-components/DarkLightModeChanger";
 import ImageTitleCard from "../common-components/ImageTitleCard";
-import DATA from "../Data";
 import { useSelector } from "react-redux";
 import ScreenData from "../common-components/ScreenData";
 import Colors from "../constants/Color";
 const Categories = ({ navigation }) => {
   const mode = useSelector((state) => state.DarkLightModeChangerData.darkMode);
+  const categoryData = useSelector((state) => state.CategoryData.categoryData);
   const screenData = ScreenData();
   const styles = StyleSheet.create({
     screen: {
@@ -17,19 +17,23 @@ const Categories = ({ navigation }) => {
     },
   });
   const renderItem = ({ item }) => (
-    <View style={{ marginBottom: 15, width: "48%" }}>
+    <TouchableOpacity
+      style={{ marginBottom: 15, width: "48%" }}
+      onPress={() =>
+        navigation.navigate("Category Meals", {
+          categoriesID: item.id,
+          categoriesName: item.name,
+        })
+      }
+    >
       <ImageTitleCard title={item.name} url={item.url} />
-    </View>
+    </TouchableOpacity>
   );
   return (
     <View style={styles.screen}>
       <DrakLightModeChanger />
-      {/* <Button
-        title="Go to Category Meals"
-        onPress={() => navigation.navigate("Category Meals")}
-      /> */}
       <FlatList
-        data={DATA[0].categories}
+        data={categoryData}
         columnWrapperStyle={{ justifyContent: "space-between" }}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}

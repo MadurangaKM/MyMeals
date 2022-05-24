@@ -1,11 +1,10 @@
-import { View, StyleSheet, Text, Image } from "react-native";
+import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 import Colors from "../constants/Color";
 import { GlobalStyle } from "../constants/GlobleStyle";
 import { useSelector } from "react-redux";
-import ScreenData from "../common-components/ScreenData";
+import { AntDesign } from "@expo/vector-icons";
 const ImageTitleCard = (props) => {
   const mode = useSelector((state) => state.DarkLightModeChangerData.darkMode);
-  const screenData = ScreenData();
   const styles = StyleSheet.create({
     card: {
       backgroundColor: mode ? Colors.surfaceColorDark : Colors.surfaceColor,
@@ -26,7 +25,7 @@ const ImageTitleCard = (props) => {
       <View style={{ ...styles.card, ...props.style }}>
         <Image
           style={{
-            height: 100,
+            height: 150,
             resizeMode: "cover",
             borderRadius: 10,
             marginBottom: 10,
@@ -35,11 +34,40 @@ const ImageTitleCard = (props) => {
             uri: props.url,
           }}
         />
+        {props.isFavoriteVisible && (
+          <TouchableOpacity
+            onPress={props.handleFavorites}
+            style={{
+              height: 50,
+              width: 50,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: 50,
+              backgroundColor: "rgba(52, 52, 52, 0.8)",
+              position: "absolute",
+              top: 35,
+              left: "85%",
+              right: 0,
+              bottom: 0,
+            }}
+          >
+            <AntDesign
+              name="heart"
+              size={24}
+              color={
+                props.isFavorite ? Colors.errorColor : Colors.darkTitleTextColor
+              }
+            />
+          </TouchableOpacity>
+        )}
+
         <Text
           numberOfLines={1}
           style={{
             ...GlobalStyle.BodyOneBold,
             color: mode ? Colors.drakNormalTextColor : Colors.normalTextColor,
+            marginTop: 5,
           }}
         >
           {props.title}
