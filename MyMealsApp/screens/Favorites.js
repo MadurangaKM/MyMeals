@@ -43,7 +43,7 @@ const Favorites = ({ route, navigation }) => {
     <TouchableOpacity
       style={{ marginBottom: 15, width: "100%" }}
       onPress={() =>
-        navigation.navigate("Home", {
+        navigation.navigate("Category", {
           screen: "Meal Details",
           params: {
             categoriesID: item.id,
