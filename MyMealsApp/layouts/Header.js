@@ -52,6 +52,13 @@ const Header = (props) => {
             color={Colors.drakNormalTextColor}
           />
         )}
+         {props.isMenu && (
+          <Ionicons
+            name="ios-menu"
+            size={24}
+            color={Colors.drakNormalTextColor}
+          />
+        )}
       </TouchableOpacity>
       <View
         style={{
