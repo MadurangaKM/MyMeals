@@ -5,16 +5,11 @@ import ImageTitleCard from "../common-components/ImageTitleCard";
 import { useSelector, useDispatch } from "react-redux";
 import ScreenData from "../common-components/ScreenData";
 import Colors from "../constants/Color";
-import { useState } from "react";
-import { useIsFocused } from "@react-navigation/native";
 const CategoryMeals = ({ route, navigation }) => {
   const mode = useSelector((state) => state.DarkLightModeChangerData.darkMode);
   const categoryData = useSelector((state) => state.CategoryData.categoryData);
-  const [favorites, setFavorites] = useState(false);
   const dispatch = useDispatch();
   const screenData = ScreenData();
-  const isFocused = useIsFocused();
-  useEffect(() => {}, [isFocused]);
   const styles = StyleSheet.create({
     screen: {
       flex: 1,
@@ -42,7 +37,6 @@ const CategoryMeals = ({ route, navigation }) => {
         isFavoriteVisible={true}
         isFavorite={item.isFavorites}
         handleFavorites={handleFavorites.bind(this, item.id)}
-        favorites={favorites}
       />
     </TouchableOpacity>
   );
@@ -64,12 +58,10 @@ const CategoryMeals = ({ route, navigation }) => {
         isFavorites: !isFavorites[0].isFavorites,
       },
     });
-    setFavorites(!favorites);
   };
   return (
     <View style={styles.screen}>
       <DrakLightModeChanger />
-      {favorites}
       <FlatList
         data={mealsData ? mealsData[0].meals : []}
         renderItem={renderItem}

@@ -12,8 +12,6 @@ import { GlobalStyle } from "../constants/GlobleStyle";
 import { useSelector, useDispatch } from "react-redux";
 import DrakLightModeChanger from "../common-components/DarkLightModeChanger";
 import { AntDesign } from "@expo/vector-icons";
-import { useIsFocused } from "@react-navigation/native";
-import { useEffect } from "react";
 const MealDetails = ({ route, navigation }) => {
   const mode = useSelector((state) => state.DarkLightModeChangerData.darkMode);
   const categoryData = useSelector((state) => state.CategoryData.categoryData);
@@ -25,8 +23,6 @@ const MealDetails = ({ route, navigation }) => {
         : Colors.backgroundColor,
     },
   });
-  const isFocused = useIsFocused();
-  useEffect(() => {}, [isFocused]);
   const dispatch = useDispatch();
   let mealsData = categoryData.filter(
     (item) => item.id === route.params.parentId
@@ -35,7 +31,6 @@ const MealDetails = ({ route, navigation }) => {
   let isFavorites = mealsData[0].meals.filter(
     (item) => item.id == route.params.categoriesID
   );
-  const [favorites, setFavorites] = useState(isFavorites[0].isFavorites);
   const handleFavorites = () => {
     dispatch({
       type: "CHANGE_CATEGORY_DATA",
@@ -45,7 +40,6 @@ const MealDetails = ({ route, navigation }) => {
         isFavorites: !isFavorites[0].isFavorites,
       },
     });
-    setFavorites(!favorites);
   };
   return (
     <View style={styles.screen}>
@@ -83,8 +77,7 @@ const MealDetails = ({ route, navigation }) => {
             name="heart"
             size={24}
             color={
-              // isFavorites[0].isFavorites
-              favorites ? Colors.errorColor : Colors.darkTitleTextColor
+              isFavorites[0].isFavorites? Colors.errorColor : Colors.darkTitleTextColor
             }
           />
         </TouchableOpacity>

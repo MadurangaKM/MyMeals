@@ -6,17 +6,12 @@ import DrakLightModeChanger from "../common-components/DarkLightModeChanger";
 import FilterSwitch from "../common-components/FilterSwitch";
 import ScreenData from "../common-components/ScreenData";
 import { useState } from "react";
-import { useEffect } from "react";
-import { useIsFocused } from "@react-navigation/native";
 const Filter = ({ route, navigation }) => {
   const mode = useSelector((state) => state.DarkLightModeChangerData.darkMode);
   const [isVegan, setIsVegan] = useState(false);
-  const [favorites, setFavorites] = useState(false);
   const [isGluten, setIsGluten] = useState(false);
   const categoryData = useSelector((state) => state.CategoryData.categoryData);
   const screenData = ScreenData();
-  const isFocused = useIsFocused();
-  useEffect(() => {}, [isFocused, isVegan, isGluten]);
   const dispatch = useDispatch();
   const styles = StyleSheet.create({
     screen: {
@@ -74,12 +69,9 @@ const Filter = ({ route, navigation }) => {
         isFavorites: !isFavorites,
       },
     });
-    setFavorites(!favorites);
   };
-  console.log("Check Category Data", filterData);
   return (
     <View style={styles.screen}>
-      {favorites}
       <DrakLightModeChanger />
       <View
         style={{
