@@ -6,7 +6,6 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { useState } from "react";
 import Colors from "../constants/Color";
 import { GlobalStyle } from "../constants/GlobleStyle";
 import { useSelector, useDispatch } from "react-redux";
