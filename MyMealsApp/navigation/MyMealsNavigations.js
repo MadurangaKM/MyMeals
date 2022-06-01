@@ -12,6 +12,8 @@ import { GlobalStyle } from "../constants/GlobleStyle";
 import { Ionicons } from "@expo/vector-icons";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import Filters from "../screens/Filters";
+import ShopingList from "../screens/ShopingList";
+import { MaterialIcons } from "@expo/vector-icons";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -179,6 +181,37 @@ export default function DrawerNav() {
             drawerIcon: ({ focused, size }) => (
               <Ionicons
                 name="filter"
+                size={size}
+                color={focused ? Colors.primaryDark : Colors.darkTitleTextColor}
+              />
+            ),
+            drawerActiveTintColor: Colors.primaryDark,
+            drawerLabelStyle: {
+              ...GlobalStyle.ButtonText,
+              color: mode ? Colors.darkTitleTextColor : Colors.normalTextColor,
+            },
+            header: (props) => (
+              <Header
+                {...props}
+                onPress={navigation.openDrawer}
+                name={route.name}
+                isMenu={true}
+              />
+            ),
+          })}
+        />
+        <Drawer.Screen
+          name="Shoping List"
+          component={ShopingList}
+          options={({ navigation, route }) => ({
+            drawerStyle: {
+              backgroundColor: mode
+                ? Colors.backgroundColorDark
+                : Colors.backgroundColor,
+            },
+            drawerIcon: ({ focused, size }) => (
+              <MaterialIcons
+                name="shopping-cart"
                 size={size}
                 color={focused ? Colors.primaryDark : Colors.darkTitleTextColor}
               />
