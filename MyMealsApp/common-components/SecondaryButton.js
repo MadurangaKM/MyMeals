@@ -8,9 +8,10 @@ const Button = (props) => {
     <TouchableOpacity onPress={props.onPress} style={styles.button}>
       <Text
         style={{
-          color: mode ? Colors.primaryDark : Colors.primary,
+          color: mode ? Colors.primary : Colors.primary,
           paddingTop: Platform.OS === "android" ? 3 : 0,
           ...GlobalStyle.ButtonText,
+          ...props.style,
         }}
       >
         {props.title}

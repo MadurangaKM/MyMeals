@@ -12,9 +12,9 @@ const Button = (props) => {
       {props.isIcon && (
         <Ionicons
           name={props.iconName}
-          size={20}
+          size={18}
           color={Colors.drakNormalTextColor}
-          style={{ marginRight: 4 }}
+          style={props.iconOnly ? {} : { marginRight: 4 }}
         />
       )}
       <Text
