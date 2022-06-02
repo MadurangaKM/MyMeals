@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import FlashMessage from "react-native-flash-message";
 import * as Font from "expo-font";
@@ -7,6 +7,10 @@ import { showMessage } from "react-native-flash-message";
 import { Provider } from "react-redux";
 import Store from "./store/Main";
 import MyMealsNavigations from "./navigation/MyMealsNavigations";
+import AuthContextProvider, { AuthContext } from "./store/AuthContext";
+import Auth from "./screens/Auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useDispatch } from "react-redux";
 const fetchFonts = () => {
   return Font.loadAsync({
     "poppins-bold": require("./assets/fonts/Poppins-Bold.otf"),
@@ -17,7 +21,43 @@ const fetchFonts = () => {
     "poppins-regular": require("./assets/fonts/Poppins-Regular.otf"),
   });
 };
+function Root() {
+  const authContext = useContext(AuthContext);
+  const dispatch = useDispatch();
+  const [isTryingLogin, setIsTryingLogin] = useState(true);
+  useEffect(() => {
+    async function fetchToken() {
+      const storedToken = await AsyncStorage.getItem("token");
+      const darkMode = await AsyncStorage.getItem("darMode");
 
+      if (storedToken) {
+        authContext.loginUser(storedToken);
+      }
+      if (darkMode) {
+        dispatch({
+          type: "CHANGE_DARK_MODE",
+          payload: darkMode == "true" ? true : false,
+        });
+      }
+      setIsTryingLogin(false);
+    }
+    fetchToken();
+  }, []);
+
+  if (isTryingLogin) {
+    <AppLoading />;
+  }
+  return <Navigation />;
+}
+function Navigation() {
+  const authContext = useContext(AuthContext);
+  return (
+    <View style={{ flex: 1 }}>
+      {authContext.isLogin && <MyMealsNavigations />}
+      {!authContext.isLogin && <Auth />}
+    </View>
+  );
+}
 export default function App() {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   if (!isDataLoaded) {
@@ -36,17 +76,21 @@ export default function App() {
   }
 
   return (
-    <Provider store={Store}>
-      <View style={styles.screen}>
-        <MyMealsNavigations />
-        <FlashMessage
-          position="bottom"
-          statusBarHeight={0}
-          icon={"auto"}
-          floating={true}
-        />
-      </View>
-    </Provider>
+    <AuthContextProvider>
+      <Provider store={Store}>
+        <View style={styles.screen}>
+          {/* <Auth /> */}
+          {/* <MyMealsNavigations /> */}
+          <Root />
+          <FlashMessage
+            position="bottom"
+            statusBarHeight={0}
+            icon={"auto"}
+            floating={true}
+          />
+        </View>
+      </Provider>
+    </AuthContextProvider>
   );
 }
 
