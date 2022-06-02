@@ -1,3 +1,4 @@
+import React, { useContext } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
 import DrakLightModeChanger from "../common-components/DarkLightModeChanger";
 import { useSelector } from "react-redux";
@@ -11,22 +12,25 @@ import { showMessage } from "react-native-flash-message";
 import Config from "../config/Config";
 import axios from "axios";
 import LoadingOverlay from "../common-components/LoadingOverlay";
+import { AuthContext } from "../store/AuthContext";
 const ShopingList = ({ route, navigation }) => {
   const mode = useSelector((state) => state.DarkLightModeChangerData.darkMode);
   const screenData = ScreenData();
   const [enteredList, setEnteredList] = useState("");
   const [allListsset, setAllListsset] = useState([]);
   const [isLoading, setisLoading] = useState(false);
+  const authContext = useContext(AuthContext);
+  const token = authContext.token;
   const textInputHandler = (text) => {
     setEnteredList(text);
   };
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [token]);
   const fetchData = () => {
     setisLoading(true);
     axios
-      .get(Config.baseUrl + "/shoppingList.json")
+      .get(Config.baseUrl + "/shoppingList.json?auth=" + token)
       .then((response) => {
         const data = [];
         for (const key in response.data) {
@@ -69,7 +73,9 @@ const ShopingList = ({ route, navigation }) => {
     }
     setisLoading(true);
     axios
-      .post(Config.baseUrl + "/shoppingList.json", { value: enteredList })
+      .post(Config.baseUrl + "/shoppingList.json?auth=" + token, {
+        value: enteredList,
+      })
       .then((response) => {
         setEnteredList("");
         showMessage({
@@ -89,7 +95,7 @@ const ShopingList = ({ route, navigation }) => {
   const handleDelete = (id) => {
     setisLoading(true);
     axios
-      .delete(Config.baseUrl + "/shoppingList/" + id + ".json")
+      .delete(Config.baseUrl + "/shoppingList/" + id + ".json?auth=" + token)
       .then((response) => {
         showMessage({
           message: "Sucessfully Deleted Item",

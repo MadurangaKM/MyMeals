@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   StyleSheet,
   Image,
   Text,
   Platform,
   View,
+  ScrollView,
   TouchableOpacity,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
@@ -18,19 +19,35 @@ import SecondaryButton from "../common-components/SecondaryButton";
 import { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
+import Config from "../config/Config";
+import { showMessage } from "react-native-flash-message";
+import LoadingOverlay from "../common-components/LoadingOverlay";
+import { AuthContext } from "../store/AuthContext";
+import { useDispatch } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 const Auth = (props) => {
   const screenData = ScreenData();
+  const authContext = useContext(AuthContext);
   const [isSignUp, setIsSignUp] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
+  const dispatch = useDispatch();
   const styles = StyleSheet.create({
     screen: {
       flex: 1,
-      alignItems: "center",
-      justifyContent: "center",
     },
   });
   const handleSecondaryButton = () => {
     setIsSignUp(!isSignUp);
   };
+  useEffect(() => {
+    // AsyncStorage.setItem("darMode", "true");
+    dispatch({
+      type: "CHANGE_DARK_MODE",
+      payload: true,
+    });
+  }, []);
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -56,7 +73,13 @@ const Auth = (props) => {
         : Yup.string().notRequired(),
     }),
     onSubmit: (values) => {
-      console.log("Check Values", values);
+      if (isSignUp) {
+        createUser(values.email, values.password);
+        return;
+      } else {
+        loginInUser(values.email, values.password);
+        return;
+      }
     },
   });
   const handleInputChange = (name, value) => {
@@ -68,6 +91,55 @@ const Auth = (props) => {
     };
     formik.handleChange(event);
   };
+  const createUser = (email, password) => {
+    setisLoading(true);
+    axios
+      .post(
+        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" +
+          Config.apiKey,
+        {
+          email: email,
+          password: password,
+          returnSecureToken: true,
+        }
+      )
+      .then((response) => {
+        authContext.loginUser(response.data.idToken);
+      })
+      .catch((error) => {
+        showMessage({
+          message: error.message,
+          type: "danger",
+        });
+        setisLoading(false);
+      });
+  };
+  const loginInUser = (email, password) => {
+    setisLoading(true);
+    axios
+      .post(
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" +
+          Config.apiKey,
+        {
+          email: email,
+          password: password,
+          returnSecureToken: true,
+        }
+      )
+      .then((response) => {
+        authContext.loginUser(response.data.idToken);
+      })
+      .catch((error) => {
+        showMessage({
+          message: "Invalid Credentials",
+          type: "danger",
+        });
+        setisLoading(false);
+      });
+  };
+  if (isLoading) {
+    return <LoadingOverlay />;
+  }
   return (
     <LinearGradient
       start={{ x: 0, y: 0 }}
@@ -79,82 +151,90 @@ const Auth = (props) => {
       ]}
       style={styles.screen}
     >
-      <Image
-        style={{
-          height: "25%",
-          width: "50%",
-          resizeMode: "contain",
-        }}
-        source={Logo}
-      />
-      <View
-        style={{
-          width: "90%",
-          backgroundColor: "rgba(255, 255, 255, 0.2)",
-          marginTop: 20,
-          borderRadius: 20,
-          padding: 20,
+      <KeyboardAwareScrollView
+        contentContainerStyle={{
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
-        <TextInputField
-          placeholder="Enter Email"
-          id="email"
-          name="email"
-          value={formik.values.email}
-          onChangeText={handleInputChange.bind(this, "email")}
-          error={Boolean(formik.errors.email)}
-          errorMessage={formik.errors.email}
-        />
-        <TextInputField
-          placeholder="Enter Password"
-          id="password"
-          name="password"
-          value={formik.values.password}
-          onChangeText={handleInputChange.bind(this, "password")}
-          error={Boolean(formik.errors.password)}
-          errorMessage={formik.errors.password}
-          secureTextEntry={true}
-        />
-        {isSignUp && (
-          <TextInputField
-            placeholder="Re-Enter Password"
-            id="reEnterPassword"
-            name="reEnterPassword"
-            value={formik.values.reEnterPassword}
-            onChangeText={handleInputChange.bind(this, "reEnterPassword")}
-            error={Boolean(formik.errors.reEnterPassword)}
-            errorMessage={formik.errors.reEnterPassword}
-            secureTextEntry={true}
-          />
-        )}
-        <Button
-          title={isSignUp ? "SIGN UP" : "LOGIN"}
-          onPress={formik.handleSubmit}
+        <Image
+          style={{
+            height: "22%",
+            width: "100%",
+            resizeMode: "contain",
+          }}
+          source={Logo}
         />
         <View
           style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
+            backgroundColor: "rgba(255, 255, 255, 0.2)",
+            marginTop: 20,
+            borderRadius: 20,
+            padding: 20,
+            width: "90%",
           }}
         >
-          <Text
+          <TextInputField
+            placeholder="Enter Email"
+            id="email"
+            name="email"
+            value={formik.values.email}
+            onChangeText={handleInputChange.bind(this, "email")}
+            error={Boolean(formik.errors.email)}
+            errorMessage={formik.errors.email}
+          />
+          <TextInputField
+            placeholder="Enter Password"
+            id="password"
+            name="password"
+            value={formik.values.password}
+            onChangeText={handleInputChange.bind(this, "password")}
+            error={Boolean(formik.errors.password)}
+            errorMessage={formik.errors.password}
+            secureTextEntry={true}
+          />
+          {isSignUp && (
+            <TextInputField
+              placeholder="Re-Enter Password"
+              id="reEnterPassword"
+              name="reEnterPassword"
+              value={formik.values.reEnterPassword}
+              onChangeText={handleInputChange.bind(this, "reEnterPassword")}
+              error={Boolean(formik.errors.reEnterPassword)}
+              errorMessage={formik.errors.reEnterPassword}
+              secureTextEntry={true}
+            />
+          )}
+          <Button
+            title={isSignUp ? "SIGN UP" : "LOGIN"}
+            onPress={formik.handleSubmit}
+          />
+          <View
             style={{
-              ...GlobalStyle.BodyOne,
-              marginTop: 10,
-              marginLeft: 15,
-              color: Colors.surfaceColor,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
-            {isSignUp ? "Do you have account?" : "Don't have account?"}
-          </Text>
-          <SecondaryButton
-            onPress={handleSecondaryButton}
-            style={{ marginTop: 10, marginLeft: -15 }}
-            title={isSignUp ? "LOGIN" : "SIGN UP"}
-          />
+            <Text
+              style={{
+                ...GlobalStyle.BodyOne,
+                marginTop: 10,
+                marginLeft: 15,
+                color: Colors.surfaceColor,
+              }}
+            >
+              {isSignUp ? "Do you have account?" : "Don't have account?"}
+            </Text>
+            <SecondaryButton
+              onPress={handleSecondaryButton}
+              style={{ marginTop: 10, marginLeft: -15 }}
+              title={isSignUp ? "LOGIN" : "SIGN UP"}
+            />
+          </View>
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     </LinearGradient>
   );
 };
