@@ -1,3 +1,5 @@
+import React, { useContext } from "react";
+import { View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Categories from "../screens/Categories";
@@ -10,10 +12,17 @@ import { useSelector } from "react-redux";
 import Colors from "../constants/Color";
 import { GlobalStyle } from "../constants/GlobleStyle";
 import { Ionicons } from "@expo/vector-icons";
-import { createDrawerNavigator } from "@react-navigation/drawer";
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem,
+} from "@react-navigation/drawer";
 import Filters from "../screens/Filters";
 import ShopingList from "../screens/ShopingList";
 import { MaterialIcons } from "@expo/vector-icons";
+import Button from "../common-components/PrimaryButton";
+import { AuthContext } from "../store/AuthContext";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -141,7 +150,10 @@ export default function DrawerNav() {
 
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Main Category">
+      <Drawer.Navigator
+        initialRouteName="Main Category"
+        drawerContent={CustomDrawerContent}
+      >
         <Drawer.Screen
           name="Home"
           component={TabNavigation}
@@ -233,5 +245,27 @@ export default function DrawerNav() {
         />
       </Drawer.Navigator>
     </NavigationContainer>
+  );
+}
+function CustomDrawerContent(props) {
+  const authContext = useContext(AuthContext);
+  return (
+    <DrawerContentScrollView {...props}>
+      <DrawerItemList {...props} />
+      <View
+        style={{
+          width: "60%",
+          marginTop: 10,
+          marginLeft: "7%",
+        }}
+      >
+        <Button
+          isIcon={true}
+          iconName="power-sharp"
+          title="LOGOUT"
+          onPress={authContext.logout}
+        />
+      </View>
+    </DrawerContentScrollView>
   );
 }
