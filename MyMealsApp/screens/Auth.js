@@ -128,6 +128,9 @@ const Auth = (props) => {
       )
       .then((response) => {
         authContext.loginUser(response.data.idToken);
+        setTimeout(() => {
+          authContext.logout();
+        }, 3600000);
       })
       .catch((error) => {
         showMessage({
