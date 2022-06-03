@@ -52,7 +52,7 @@ const Header = (props) => {
             color={Colors.drakNormalTextColor}
           />
         )}
-         {props.isMenu && (
+        {props.isMenu && (
           <Ionicons
             name="ios-menu"
             size={24}
@@ -62,16 +62,34 @@ const Header = (props) => {
       </TouchableOpacity>
       <View
         style={{
-          flex: 0.87,
+          flex: props.isAdd ? 0.7 : 0.87,
           justifyContent: "center",
           alignItems: "center",
-          paddingRight: "12%",
+          alignSelf: "center",
+          paddingRight: props.isAdd ? 0 : "12%",
+          paddingLeft: props.isAdd ? "2%" : 0,
         }}
       >
         <Text style={{ ...styles.title, ...GlobalStyle.Heading }}>
           {props.name}
         </Text>
       </View>
+      {props.isAdd && (
+        <TouchableOpacity
+          onPress={props.onPressAdd}
+          style={{
+            flex: 0.13,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Ionicons
+            name="md-add-sharp"
+            size={24}
+            color={Colors.drakNormalTextColor}
+          />
+        </TouchableOpacity>
+      )}
     </LinearGradient>
   );
 };
