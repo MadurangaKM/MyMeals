@@ -3,6 +3,7 @@ import Colors from "../constants/Color";
 import { GlobalStyle } from "../constants/GlobleStyle";
 import { useSelector } from "react-redux";
 import { AntDesign } from "@expo/vector-icons";
+import { mapPreview } from "./MapPreview";
 const ImageTitleCard = (props) => {
   const mode = useSelector((state) => state.DarkLightModeChangerData.darkMode);
   const styles = StyleSheet.create({
@@ -23,6 +24,17 @@ const ImageTitleCard = (props) => {
   return (
     <View style={styles.screen}>
       <View style={{ ...styles.card, ...props.style }}>
+        <Text
+          numberOfLines={1}
+          style={{
+            ...GlobalStyle.BodyOneBold,
+            color: mode ? Colors.drakNormalTextColor : Colors.normalTextColor,
+            marginTop: 2,
+            marginBottom: 10,
+          }}
+        >
+          {props.title}
+        </Text>
         <Image
           style={{
             height: 150,
@@ -46,7 +58,7 @@ const ImageTitleCard = (props) => {
               borderRadius: 50,
               backgroundColor: "rgba(52, 52, 52, 0.8)",
               position: "absolute",
-              top: 35,
+              top: 65,
               left: "85%",
               right: 0,
               bottom: 0,
@@ -61,17 +73,23 @@ const ImageTitleCard = (props) => {
             />
           </TouchableOpacity>
         )}
-
-        <Text
-          numberOfLines={1}
-          style={{
-            ...GlobalStyle.BodyOneBold,
-            color: mode ? Colors.drakNormalTextColor : Colors.normalTextColor,
-            marginTop: 5,
-          }}
-        >
-          {props.title}
-        </Text>
+        {props.location && (
+          <Image
+            style={{
+              height: 200,
+              resizeMode: "cover",
+              borderRadius: 10,
+              marginBottom: 10,
+              marginTop: 10,
+            }}
+            source={{
+              uri: mapPreview(
+                props.location.latitude,
+                props.location.longitude
+              ),
+            }}
+          />
+        )}
       </View>
     </View>
   );
