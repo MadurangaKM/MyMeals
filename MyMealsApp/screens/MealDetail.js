@@ -11,6 +11,7 @@ import { GlobalStyle } from "../constants/GlobleStyle";
 import { useSelector, useDispatch } from "react-redux";
 import DrakLightModeChanger from "../common-components/DarkLightModeChanger";
 import { AntDesign } from "@expo/vector-icons";
+import { mapPreview } from "../common-components/MapPreview";
 const MealDetails = ({ route, navigation }) => {
   const mode = useSelector((state) => state.DarkLightModeChangerData.darkMode);
   const categoryData = useSelector((state) => state.CategoryData.categoryData);
@@ -76,7 +77,9 @@ const MealDetails = ({ route, navigation }) => {
             name="heart"
             size={24}
             color={
-              isFavorites[0].isFavorites? Colors.errorColor : Colors.darkTitleTextColor
+              isFavorites[0].isFavorites
+                ? Colors.errorColor
+                : Colors.darkTitleTextColor
             }
           />
         </TouchableOpacity>
@@ -92,6 +95,7 @@ const MealDetails = ({ route, navigation }) => {
         >
           {route.params.categoriesName}
         </Text>
+
         <Text
           style={{
             ...GlobalStyle.BodyOne,
@@ -110,6 +114,37 @@ const MealDetails = ({ route, navigation }) => {
           Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean
           vulputate eleifend tellus.
         </Text>
+        {route.params.location && (
+          <Text
+            numberOfLines={1}
+            style={{
+              ...GlobalStyle.BodyOneBold,
+              color: mode ? Colors.drakNormalTextColor : Colors.normalTextColor,
+              paddingHorizontal: 20,
+              paddingTop: 20,
+              marginBottom: 10,
+            }}
+          >
+            Location
+          </Text>
+        )}
+        {route.params.location && (
+          <Image
+            style={{
+              height: 400,
+              resizeMode: "cover",
+              borderRadius: 10,
+              marginBottom: 10,
+              marginTop: 10,
+            }}
+            source={{
+              uri: mapPreview(
+                route.params.location.latitude,
+                route.params.location.longitude
+              ),
+            }}
+          />
+        )}
       </ScrollView>
     </View>
   );
