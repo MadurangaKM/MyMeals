@@ -252,6 +252,8 @@ const initialState = {
           id: 6.1,
           name: "Cheese Pizza",
           isFavorites: false,
+          isVegan: false,
+          isGluten: false,
           rootId: 6,
           url: "https://images.unsplash.com/photo-1513104890138-7c749659a591?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=60&raw_url=true&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2hlZXNlJTIwcGl6emF8ZW58MHwwfDB8fA%3D%3D&auto=format&fit=crop&w=900",
         },
@@ -259,6 +261,8 @@ const initialState = {
           id: 6.2,
           name: "Chicken pasta bake",
           isFavorites: false,
+          isVegan: false,
+          isGluten: false,
           rootId: 6,
           url: "https://images.unsplash.com/photo-1465911817134-741b5e473a1b?ixlib=rb-1.2.1&raw_url=true&q=60&fm=jpg&crop=entropy&cs=tinysrgb&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8Y2hpY2tlbiUyMHBhc3RhJTIwYmFrZXxlbnwwfDB8MHx8&auto=format&fit=crop&w=900",
         },
@@ -266,6 +270,8 @@ const initialState = {
           id: 6.3,
           name: "Creamy pasta bake",
           isFavorites: false,
+          isVegan: false,
+          isGluten: false,
           rootId: 6,
           url: "https://images.unsplash.com/photo-1473093226795-af9932fe5856?ixlib=rb-1.2.1&raw_url=true&q=80&fm=jpg&crop=entropy&cs=tinysrgb&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1588",
         },
@@ -273,6 +279,8 @@ const initialState = {
           id: 6.4,
           name: "Chicken tray bake",
           isFavorites: false,
+          isVegan: false,
+          isGluten: false,
           rootId: 6,
           url: "https://images.unsplash.com/photo-1514518189759-94d8ee01ecf1?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740",
         },
@@ -280,6 +288,8 @@ const initialState = {
           id: 6.5,
           name: "Salmon pasta",
           isFavorites: false,
+          isVegan: false,
+          isGluten: false,
           rootId: 6,
           url: "https://images.unsplash.com/photo-1473093226795-af9932fe5856?ixlib=rb-1.2.1&raw_url=true&q=80&fm=jpg&crop=entropy&cs=tinysrgb&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1588",
         },
@@ -383,6 +393,29 @@ export default (state = initialState, action) => {
                 isFavorites: { $set: action.payload.isFavorites },
               },
             },
+          },
+        },
+      });
+    }
+    case "ADD_FAVORITE_DATA": {
+      let data = state.categoryData;
+      let objIndex = data.findIndex(
+        (obj) => obj.id == action.payload.categoryId
+      );
+      let meals = {
+        id: Math.random(),
+        isFavorites: true,
+        isVegan: action.payload.isVegan,
+        isGluten: action.payload.isGluten,
+        rootId: action.payload.categoryId,
+        url: action.payload.url,
+        name: action.payload.name,
+        location: action.payload.location,
+      };
+      return update(state, {
+        categoryData: {
+          [objIndex]: {
+            meals: { $push: [meals] },
           },
         },
       });
