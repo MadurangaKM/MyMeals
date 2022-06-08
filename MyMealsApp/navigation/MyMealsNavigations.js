@@ -23,6 +23,7 @@ import ShopingList from "../screens/ShopingList";
 import { MaterialIcons } from "@expo/vector-icons";
 import Button from "../common-components/PrimaryButton";
 import { AuthContext } from "../store/AuthContext";
+import AddFavorites from "../screens/AddFavorite";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -74,6 +75,42 @@ function MyMealsNavigations() {
     </Stack.Navigator>
   );
 }
+function FavoritesNav() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Favorites"
+        component={Favorites}
+        options={({ navigation, route }) => ({
+          header: (props) => (
+            <Header
+              {...props}
+              onPress={navigation.openDrawer}
+              name={route.name}
+              isMenu={true}
+              routeName="Add Favorite"
+              isAdd={true}
+            />
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="Add Favorite"
+        component={AddFavorites}
+        options={({ navigation, route }) => ({
+          header: (props) => (
+            <Header
+              {...props}
+              isBack={true}
+              onPress={navigation.goBack}
+              name={"Add Favorite"}
+            />
+          ),
+        })}
+      />
+    </Stack.Navigator>
+  );
+}
 function TabNavigation() {
   const mode = useSelector((state) => state.DarkLightModeChangerData.darkMode);
   return (
@@ -111,9 +148,10 @@ function TabNavigation() {
         })}
       />
       <Tab.Screen
-        name="Favorites"
-        component={Favorites}
+        name="My Favorites"
+        component={FavoritesNav}
         options={({ navigation, route }) => ({
+          headerShown: false,
           tabBarLabelStyle: { ...GlobalStyle.ButtonText, marginTop: -12 },
           tabBarActiveTintColor: Colors.primaryDark,
           tabBarStyle: {

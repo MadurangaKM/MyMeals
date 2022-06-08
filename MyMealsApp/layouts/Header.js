@@ -11,8 +11,11 @@ import Colors from "../constants/Color";
 import { GlobalStyle } from "../constants/GlobleStyle";
 import ScreenData from "../common-components/ScreenData";
 import { Ionicons } from "@expo/vector-icons";
+import { Button } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 const Header = (props) => {
   const screenData = ScreenData();
+  const navigation = useNavigation();
   const styles = StyleSheet.create({
     header: {
       width: "100%",
@@ -76,7 +79,7 @@ const Header = (props) => {
       </View>
       {props.isAdd && (
         <TouchableOpacity
-          onPress={props.onPressAdd}
+          onPress={() => navigation.navigate(props.routeName,{})}
           style={{
             flex: 0.13,
             justifyContent: "center",
