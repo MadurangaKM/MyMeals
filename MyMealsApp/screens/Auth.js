@@ -105,6 +105,9 @@ const Auth = (props) => {
       )
       .then((response) => {
         authContext.loginUser(response.data.idToken);
+        setTimeout(() => {
+          authContext.logout();
+        }, 1800000);
       })
       .catch((error) => {
         showMessage({
@@ -130,7 +133,7 @@ const Auth = (props) => {
         authContext.loginUser(response.data.idToken);
         setTimeout(() => {
           authContext.logout();
-        }, 3600000);
+        }, 1800000);
       })
       .catch((error) => {
         showMessage({
