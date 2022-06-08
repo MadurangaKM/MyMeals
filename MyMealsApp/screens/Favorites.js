@@ -41,6 +41,7 @@ const Favorites = ({ route, navigation }) => {
             categoriesName: item.name,
             mealImageUrl: item.url,
             parentId: item.rootId,
+            location: item.location,
           },
         })
       }
@@ -52,13 +53,13 @@ const Favorites = ({ route, navigation }) => {
         isFavorite={item.isFavorites}
         handleFavorites={handleFavorites.bind(this, item.id, item.rootId)}
         style={{ marginBottom: 10 }}
+        location={item.location}
       />
     </TouchableOpacity>
   );
   let mealsData = categoryData.map((item) => item.meals);
   let merged = [].concat.apply([], mealsData);
   let favoritesData = merged.filter((item) => item.isFavorites === true);
-
   return (
     <View style={styles.screen}>
       <DrakLightModeChanger />
