@@ -1,19 +1,29 @@
 import React from "react";
-import { StyleSheet, Text, Platform} from "react-native";
+import {
+  StyleSheet,
+  Text,
+  Platform,
+  View,
+  TouchableOpacity,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Colors from "../constants/Color";
 import { GlobalStyle } from "../constants/GlobleStyle";
 import ScreenData from "../common-components/ScreenData";
+import { Ionicons } from "@expo/vector-icons";
+import { Button } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 const Header = (props) => {
   const screenData = ScreenData();
+  const navigation = useNavigation();
   const styles = StyleSheet.create({
     header: {
       width: "100%",
-      height:screenData.isLandscape? 50: Platform.OS === "ios" ? 100 : 80,
-      paddingTop: screenData.isLandscape? 0:Platform.OS === "ios" ? 30 : 0,
+      height: screenData.isLandscape ? 50 : Platform.OS === "ios" ? 100 : 80,
+      paddingTop: screenData.isLandscape ? 0 : Platform.OS === "ios" ? 30 : 0,
       backgroundColor: "red",
-      justifyContent: "center",
       alignItems: "center",
+      flexDirection: "row",
     },
     title: {
       color: Colors.drakNormalTextColor,
@@ -30,9 +40,59 @@ const Header = (props) => {
       ]}
       style={styles.header}
     >
-      <Text style={{ ...styles.title, ...GlobalStyle.Heading }}>
-        {props.title}
-      </Text>
+      <TouchableOpacity
+        onPress={props.onPress}
+        style={{
+          flex: 0.13,
+          justifyContent: "center",
+          alignItems: "flex-end",
+        }}
+      >
+        {props.isBack && (
+          <Ionicons
+            name="arrow-back"
+            size={24}
+            color={Colors.drakNormalTextColor}
+          />
+        )}
+        {props.isMenu && (
+          <Ionicons
+            name="ios-menu"
+            size={24}
+            color={Colors.drakNormalTextColor}
+          />
+        )}
+      </TouchableOpacity>
+      <View
+        style={{
+          flex: props.isAdd ? 0.7 : 0.87,
+          justifyContent: "center",
+          alignItems: "center",
+          alignSelf: "center",
+          paddingRight: props.isAdd ? 0 : "12%",
+          paddingLeft: props.isAdd ? "2%" : 0,
+        }}
+      >
+        <Text style={{ ...styles.title, ...GlobalStyle.Heading }}>
+          {props.name}
+        </Text>
+      </View>
+      {props.isAdd && (
+        <TouchableOpacity
+          onPress={() => navigation.navigate(props.routeName,{})}
+          style={{
+            flex: 0.13,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Ionicons
+            name="md-add-sharp"
+            size={24}
+            color={Colors.drakNormalTextColor}
+          />
+        </TouchableOpacity>
+      )}
     </LinearGradient>
   );
 };

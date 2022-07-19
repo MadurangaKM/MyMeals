@@ -16,4 +16,5 @@ export default {
   surfaceColorDark: "#262C46",
   drakNormalTextColor: "#ffff",
   darkTitleTextColor: "#B9C1DF",
+  errorColorDarkMode: "#FFE700",
 };

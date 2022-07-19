@@ -12,12 +12,14 @@ import { GlobalStyle } from "../constants/GlobleStyle";
 import Card from "../common-components/Card";
 import { useSelector, useDispatch } from "react-redux";
 import ScreenData from "../common-components/ScreenData";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const DarkLightModeChanger = (props) => {
   const mode = useSelector((state) => state.DarkLightModeChangerData.darkMode);
   const screenData = ScreenData();
   const dispatch = useDispatch();
   const handleModeChange = () => {
+    const modeCheck = !mode;
+    AsyncStorage.setItem("darMode", modeCheck.toString());
     dispatch({
       type: "CHANGE_DARK_MODE",
       payload: !mode,
@@ -25,8 +27,8 @@ const DarkLightModeChanger = (props) => {
   };
   const styles = StyleSheet.create({
     screen: {
-      padding: 30,
-      paddingHorizontal: screenData.isLandscape ? 60 : 30,
+      padding: 20,
+      paddingHorizontal: screenData.isLandscape ? 60 : 20,
       paddingBottom: 0,
       alignItems: "center",
       backgroundColor: mode

@@ -13,6 +13,7 @@ const ScreenData = () => {
   return {
     ...screenData,
     isLandscape: screenData.screen.width > screenData.screen.height,
+    isSmallScreen: screenData.window.width > 320 ? false : true,
   };
 };
 export default ScreenData;
