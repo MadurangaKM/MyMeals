@@ -42,7 +42,7 @@ const Auth = (props) => {
     setIsSignUp(!isSignUp);
   };
   useEffect(() => {
-    // AsyncStorage.setItem("darMode", "true");
+    AsyncStorage.setItem("darMode", "true");
     dispatch({
       type: "CHANGE_DARK_MODE",
       payload: true,
