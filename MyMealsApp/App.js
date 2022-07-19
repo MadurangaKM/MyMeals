@@ -11,6 +11,7 @@ import AuthContextProvider, { AuthContext } from "./store/AuthContext";
 import Auth from "./screens/Auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
+import SplashScreen from "./layouts/SplashScreen";
 const fetchFonts = () => {
   return Font.loadAsync({
     "poppins-bold": require("./assets/fonts/Poppins-Bold.otf"),
@@ -51,6 +52,16 @@ function Root() {
 }
 function Navigation() {
   const authContext = useContext(AuthContext);
+  const [showComponent, setShowComponent] = useState(true);
+  useEffect(() => {
+    const toRef = setTimeout(() => {
+      setShowComponent(false);
+      clearTimeout(toRef);
+    }, 1200);
+  }, [showComponent]);
+  if (showComponent) {
+    return <SplashScreen />;
+  }
   return (
     <View style={{ flex: 1 }}>
       {authContext.isLogin && <MyMealsNavigations />}
